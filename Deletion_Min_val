@@ -1,0 +1,85 @@
+
+#include <iostream>
+// Define a structure for a binary tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int val) : data(val), left(NULL), right(NULL) {}
+};
+
+// Function to insert a new key into a BST
+TreeNode* insert(TreeNode* root, int key) {
+    if (root == NULL) return new TreeNode(key);
+    if (key < root->data)
+        root->left = insert(root->left, key);
+    else if (key > root->data)
+        root->right = insert(root->right, key);
+    return root;
+}
+
+// Function to find the minimum value node in a BST
+TreeNode* findMinNode(TreeNode* root) {
+    TreeNode* current = root;
+    while (current->left != NULL) {
+        current = current->left;
+    }
+    return current;
+}
+
+//Function to delete the node with the minimum value in the BST
+TreeNode* deleteMinNode(TreeNode* root) {
+    if (root == NULL) return root;
+
+    // If the node to be deleted is in the left subtree
+    if (root->left != NULL) {
+        root->left = deleteMinNode(root->left);
+        return root;
+    }
+    // If the node to be deleted is the minimum value node
+    else {
+        // Node with only one child or no child
+        if (root->right == NULL) {
+            delete root;
+            return NULL;
+        } else { // Node with two children
+            TreeNode* temp = root->right;
+            delete root;
+            return temp;
+        }
+    }
+}
+
+// Function to print the values of the BST nodes
+void printValues(TreeNode* root) {
+    if (root != NULL) {
+        printValues(root->left);
+        std::cout << root->data << " ";
+        printValues(root->right);
+    }
+}
+
+int main() {
+    int N;
+    std::cin >> N; // Number of nodes in the BST
+    TreeNode* root = NULL;
+
+    // Insert nodes into the BST
+    for (int i = 0; i < N; ++i) {
+        int value;
+        std::cin >> value;
+        root = insert(root, value);
+    }
+
+    // Delete the node with the minimum value
+    root = deleteMinNode(root);
+
+    // Print the values of the BST nodes in ascending order
+    if (root == NULL) {
+        std::cout << "(Empty tree)";
+    } else {
+        printValues(root);
+    }
+
+    return 0;
+}
