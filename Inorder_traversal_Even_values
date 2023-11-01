@@ -1,0 +1,79 @@
+#include<iostream>
+
+using namespace std;
+
+struct node {
+    int data;
+    struct node *left;
+    struct node *right;
+};
+
+struct node *CreateNode(int val){
+    struct node *newNode = new struct node;
+    if(newNode == NULL){
+        return NULL;
+    }
+    newNode->data = val;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    
+    return newNode;
+    
+}
+
+struct node *insertElement(struct node *root,int val){
+    if(root == NULL){
+        return CreateNode(val);
+    }
+    if(val>root->data){
+        root->right = insertElement(root->right,val);
+    } else{
+        root->left = insertElement(root->left,val);
+    }
+    
+    return root;
+}
+
+void inorder(struct node *root){
+    if(root != NULL){
+        inorder(root->left);
+        if(root->data % 2 == 0){
+            cout << root->data << " ";
+        }
+        inorder(root->right);
+    }
+}
+
+int main(){
+    struct node *root = NULL;
+    int n;
+    cin >> n;
+    for(int i=0;i<n;i++){
+        int num;
+        cin >> num;
+        root = insertElement(root,num);
+    }
+    
+    inorder(root);
+    
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
