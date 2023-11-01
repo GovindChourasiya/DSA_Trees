@@ -1,0 +1,78 @@
+
+#include <iostream>
+using namespace std;
+
+// Define a structure for a binary tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+// Function to create a new node
+TreeNode* createNode(int key) {
+    TreeNode* newNode = new TreeNode(key);
+    return newNode;
+}
+
+// Function to insert a new key into a BST
+TreeNode* insert(TreeNode* root, int key) {
+    if (root == nullptr) return createNode(key);
+    if (key < root->data)
+        root->left = insert(root->left, key);
+    else if (key > root->data)
+        root->right = insert(root->right, key);
+    return root;
+}
+
+// Function to delete the leaf nodes from the BST
+TreeNode* deleteLeafNodes(TreeNode* root) {
+    if (root == nullptr) return nullptr;
+    
+    // If the node is a leaf, delete it
+    if (root->left == nullptr && root->right == nullptr) {
+        delete root;
+        return nullptr;
+    }
+
+    // Recursively delete leaf nodes from left and right subtrees
+    root->left = deleteLeafNodes(root->left);
+    root->right = deleteLeafNodes(root->right);
+
+    return root;
+}
+
+// Function to print the values of the BST nodes
+void printValues(TreeNode* root) {
+    if (root != nullptr) {
+        printValues(root->left);
+        cout << root->data << " ";
+        printValues(root->right);
+    }
+}
+
+int main() {
+    int N;
+    cin >> N;
+    TreeNode* root = nullptr;
+
+    // Insert nodes into the BST
+    for (int i = 0; i < N; i++) {
+        int key;
+        cin >> key;
+        root = insert(root, key);
+    }
+
+    // Delete the leaf nodes from the BST
+    root = deleteLeafNodes(root);
+
+    // Print the values of the BST nodes in ascending order
+    if (root == nullptr) {
+        cout << "(Empty tree)";
+    } else {
+        printValues(root);
+    }
+
+    return 0;
+}
